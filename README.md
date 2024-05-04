@@ -96,6 +96,12 @@ To ensure a smooth and responsive user experience, the following performance opt
 
 - **Memoization**: Components and functions are memoized using the `memo` higher-order component and the `useMemo` hook, preventing unnecessary re-renders and improving performance.
 
+## Deployment
+
+The application is deployed and available at the following URL:
+
+[https://reviewscreen.netlify.app](https://reviewscreen.netlify.app)
+
 ## Scope of improvement for better optimizations
 
 - **Virtualization**: The `FieldList` component utilizes the `react-virtualized` library for virtualization, ensuring that only the visible portion of the list is rendered, improving performance and reducing memory usage.
