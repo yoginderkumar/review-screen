@@ -3,15 +3,15 @@ import React, {
   useContext,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from "react";
 import styled from "styled-components";
+import { getColorForString } from "generate-colors";
 import { ReviewScreenContext } from "../context/ReviewScreenContext";
 import pagesData from "../data/pages.json";
-import ImageSource from "../data/a2cbec1124234a6d846f908ba9531a2e-1.jpg";
+import ImageSource from "../data/a2cbec1124234a6d846f908ba9531a2e-1.webp";
 import ThemeToggle from "./ThemeToggle";
-import { getColorForString } from "generate-colors";
+import { Blurhash } from "react-blurhash";
 
 const PreviewerContainer = styled.div`
   flex-grow: 1;
@@ -25,6 +25,7 @@ const ImageContainer = styled.div`
   margin: 0 auto;
   display: flex;
   align-items: center;
+  width: 100%;
   justify-center: center;
 `;
 
@@ -52,9 +53,8 @@ const HighlightBox = styled.div<{ color: string }>`
 const zoomedUpto = 100;
 
 const DocumentPreviewer: React.FC = () => {
-  const imageRef = useRef<HTMLImageElement>(null);
   const [image, seImage] = useState<string>("");
-  const [imageLoaded, setImageLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [imageWidth, setImageWidth] = useState<number>(0);
   const [imageHeight, setImageHeight] = useState<number>(0);
   const [zoomLevel, setZoomLevel] = useState<number>(100);
@@ -93,27 +93,30 @@ const DocumentPreviewer: React.FC = () => {
   }, [hoveredField]);
 
   useEffect(() => {
-    const img = imageRef.current;
-    if (img && img?.complete) {
-      setImageLoaded(true);
-    }
+    const img = new Image();
+    img.onload = () => {
+      setIsLoaded(true);
+    };
+    img.src = ImageSource;
   }, []);
 
   return (
     <PreviewerContainer>
       <ImageContainer>
-        <img
-          alt={image}
-          ref={imageRef}
-          src={ImageSource}
-          loading="lazy"
-          style={{
-            width: `${zoomLevel}%`,
-            height: "auto",
-            maxWidth: `${zoomLevel}%`,
-            display: imageLoaded ? "block" : "none",
-          }}
-        />
+        {isLoaded ? (
+          <img
+            src={ImageSource}
+            alt={image}
+            style={{ display: "block", width: "100%", height: "100%" }}
+          />
+        ) : (
+          <Blurhash
+            hash="L5Ss50tl$*NGIAx]nOR*~Wo}RP%M"
+            width="100%"
+            height="100%"
+            punch={1}
+          />
+        )}
         {hoveredOverField?.content ? (
           <HighlightBox
             color={bgColorForHoveredField}
