@@ -96,6 +96,10 @@ To ensure a smooth and responsive user experience, the following performance opt
 
 - **Memoization**: Components and functions are memoized using the `memo` higher-order component and the `useMemo` hook, preventing unnecessary re-renders and improving performance.
 
+## Google Lighthouse Report
+
+A Google Lighthouse report has been generated for the deployed version of the application, highlighting its performance, accessibility, best practices, and SEO scores. The report can be found in the [`lighthouse-report.pdf`](https://drive.google.com/file/d/1mUitVFBCGFOuFmpVKdtdODO1plHQ1Cvo/view?usp=sharing) file uploaded at google drive.
+
 ## Deployment
 
 The application is deployed and available at the following URL:
