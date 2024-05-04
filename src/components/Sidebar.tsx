@@ -4,7 +4,7 @@ import { ReviewScreenContext } from "../context/ReviewScreenContext";
 import FieldList from "./FieldList";
 
 const SidebarContainer = styled.div`
-  width: 420px;
+  width: 320px;
   position: relative;
   height: 100%;
 `;

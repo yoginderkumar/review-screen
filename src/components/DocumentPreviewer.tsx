@@ -3,6 +3,7 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import styled from "styled-components";
@@ -16,6 +17,7 @@ const PreviewerContainer = styled.div`
   flex-grow: 1;
   position: relative;
   overflow: auto;
+  width: calc(100vw - 320px);
 `;
 
 const ImageContainer = styled.div`
@@ -24,12 +26,6 @@ const ImageContainer = styled.div`
   display: flex;
   align-items: center;
   justify-center: center;
-`;
-
-const Image = styled.img`
-  display: block;
-  max-width: 100%;
-  height: auto;
 `;
 
 const OptionsContainer = styled.div`
@@ -56,6 +52,9 @@ const HighlightBox = styled.div<{ color: string }>`
 const zoomedUpto = 100;
 
 const DocumentPreviewer: React.FC = () => {
+  const imageRef = useRef<HTMLImageElement>(null);
+  const [image, seImage] = useState<string>("");
+  const [imageLoaded, setImageLoaded] = useState(false);
   const [imageWidth, setImageWidth] = useState<number>(0);
   const [imageHeight, setImageHeight] = useState<number>(0);
   const [zoomLevel, setZoomLevel] = useState<number>(100);
@@ -66,6 +65,7 @@ const DocumentPreviewer: React.FC = () => {
   useEffect(() => {
     // Can get image from API only!
     const imageData = pagesData.data.documents[0].pages[0].image;
+    seImage(imageData.url);
     setImageWidth(imageData.width);
     setImageHeight(imageData.height);
   }, []);
@@ -92,15 +92,26 @@ const DocumentPreviewer: React.FC = () => {
     return `rgba(${r}, ${g}, ${b}, .5)`;
   }, [hoveredField]);
 
+  useEffect(() => {
+    const img = imageRef.current;
+    if (img && img?.complete) {
+      setImageLoaded(true);
+    }
+  }, []);
+
   return (
     <PreviewerContainer>
       <ImageContainer>
-        <Image
+        <img
+          alt={image}
+          ref={imageRef}
           src={ImageSource}
+          loading="lazy"
           style={{
             width: `${zoomLevel}%`,
             height: "auto",
             maxWidth: `${zoomLevel}%`,
+            display: imageLoaded ? "block" : "none",
           }}
         />
         {hoveredOverField?.content ? (
